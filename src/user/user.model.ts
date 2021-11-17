@@ -1,24 +1,35 @@
-import {Column, DataType, Model, Table} from "sequelize-typescript";
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { ApiProperty } from '@nestjs/swagger';
 
 interface UserCreationAttrs {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
-@Table({tableName: 'users'})
-export class UserModel extends Model <UserModel, UserCreationAttrs> {
-  @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
+@Table({ tableName: 'users' })
+export class UserModel extends Model<UserModel, UserCreationAttrs> {
+  @ApiProperty({ example: '1', description: 'Identificator' })
+  @Column({
+    type: DataType.INTEGER,
+    unique: true,
+    autoIncrement: true,
+    primaryKey: true,
+  })
   id: number;
 
-  @Column({type: DataType.STRING, unique: true, allowNull: false})
+  @ApiProperty({ example: 'user@gmail.com', description: "User's email" })
+  @Column({ type: DataType.STRING, unique: true, allowNull: false })
   email: string;
 
-  @Column({type: DataType.STRING, allowNull: false})
+  @ApiProperty({ example: '12345678', description: "User's password" })
+  @Column({ type: DataType.STRING, allowNull: false })
   password: string;
 
-  @Column({type: DataType.BOOLEAN, defaultValue: false})
+  @ApiProperty({ example: 'true', description: "Shown is user banned" })
+  @Column({ type: DataType.BOOLEAN, defaultValue: false })
   banned: boolean;
 
-  @Column({type: DataType.STRING, allowNull: true})
+  @ApiProperty({ example: 'Nasty behavior', description: "Describe ban reason" })
+  @Column({ type: DataType.STRING, allowNull: true })
   banReason: string;
 }
