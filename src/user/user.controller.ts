@@ -9,7 +9,7 @@ import { UserModel } from '../models/user.model';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @ApiOperation({ summary: 'Create user' })
+  @ApiOperation({ summary: 'Create user (it wrong way to create new user. You must use registration endpoint)' })
   @ApiResponse({ status: 200, type: UserModel })
   @Post()
   create(@Body() userDto: CreateUserDto) {
