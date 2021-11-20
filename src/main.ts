@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import {JwtAuthGuard} from "./guards/jwt-auth.guard";
-import {JwtService} from "@nestjs/jwt";
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtService } from '@nestjs/jwt';
 
 async function start() {
   const PORT = process.env.PORT || 5000;

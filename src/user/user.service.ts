@@ -16,9 +16,9 @@ export class UserService {
 
   async createUser(dto: CreateUserDto) {
     const user = await this.userRepository.create(dto);
-    const role = await this.rolesService.getRoleByValue('USER');
+    const role = await this.rolesService.getRoleByValue('ADMIN');
     await user.$set('roles', [role.id]); // added roles to user instance
-    user.roles = [role]
+    user.roles = [role];
     return await this.findOne(user.id, role.id);
   }
 
@@ -27,11 +27,13 @@ export class UserService {
       where: {
         id,
       },
-      include: [{
-        model: this.roleRepository,
-        where: { id: roleId },
-        attributes: ['id', 'value'],
-      }],
+      include: [
+        {
+          model: this.roleRepository,
+          where: { id: roleId },
+          attributes: ['id', 'value'],
+        },
+      ],
     });
   }
 
@@ -41,7 +43,10 @@ export class UserService {
   }
 
   async getUserByEmail(email: string) {
-    const user = await this.userRepository.findOne({where: {email}, include: {all: true}})
-    return user
+    const user = await this.userRepository.findOne({
+      where: { email },
+      include: { all: true },
+    });
+    return user;
   }
 }
