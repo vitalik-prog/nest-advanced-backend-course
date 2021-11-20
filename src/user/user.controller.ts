@@ -1,16 +1,21 @@
-import {Body, Controller, Get, Post, UseGuards} from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserService } from './user.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserModel } from '../models/user.model';
-import {JwtAuthGuard} from "../guards/jwt-auth.guard";
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { Roles } from '../auth/roles-auth.decorator';
+import { RolesGuard } from '../guards/roles.guard';
 
 @ApiTags('Users endpoints')
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @ApiOperation({ summary: 'Create user (it wrong way to create new user. You must use registration endpoint)' })
+  @ApiOperation({
+    summary:
+      'Create user (it wrong way to create new user. You must use registration endpoint)',
+  })
   @ApiResponse({ status: 200, type: UserModel })
   @Post()
   create(@Body() userDto: CreateUserDto) {
@@ -19,7 +24,8 @@ export class UserController {
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [UserModel] })
-  @UseGuards(JwtAuthGuard) // guard that restrict unauthorized users get info from this endpoint
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard) // guard that restrict unauthorized users get info from this endpoint && second guard restrict access to not ADMIN users
   @Get()
   getAll() {
     return this.userService.getAll();
