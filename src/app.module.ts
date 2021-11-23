@@ -3,12 +3,16 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModel } from './models/user.model';
-import { RolesService } from './roles/roles.service';
+import * as path from 'path'
 import { RolesModule } from './roles/roles.module';
 import { RoleModel } from './models/roles.model';
 import { UserRolesModel } from './models/user-roles.model';
 import { UserService } from './user/user.service';
 import { AuthModule } from './auth/auth.module';
+import { PostsModule } from './posts/posts.module';
+import {PostsModel} from "./models/posts.model";
+import { FilesModule } from './files/files.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -22,12 +26,17 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.POSTGRESS_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRESS_DB,
-      models: [UserModel, RoleModel, UserRolesModel],
+      models: [UserModel, RoleModel, UserRolesModel, PostsModel],
       autoLoadModels: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, 'static'),
     }),
     UserModule,
     RolesModule,
     AuthModule,
+    PostsModule,
+    FilesModule,
   ],
 })
 export class AppModule {}
